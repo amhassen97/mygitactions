@@ -18,20 +18,22 @@ jobs:
 
       - name: Get release ID
         id: get_release_id
-        run: |
-          const core = require('@actions/core');
-          const github = require('@actions/github');
-          const fs = require('fs');
+        uses: actions/github-script@v7
+        with: 
+          script: |
+            const core = require('@actions/core');
+            const github = require('@actions/github');
+            const fs = require('fs');
 
-          // Read the event payload
-          const eventPath = process.env.GITHUB_EVENT_PATH;
-          const eventPayload = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
+            // Read the event payload
+            const eventPath = process.env.GITHUB_EVENT_PATH;
+            const eventPayload = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
 
-          // Extract the release ID
-          const releaseId = eventPayload.release.id;
+            // Extract the release ID
+            const releaseId = eventPayload.release.id;
 
-          // Set the release ID as an output
-          core.setOutput('release_id', releaseId);
+            // Set the release ID as an output
+            core.setOutput('release_id', releaseId);
 
       - name: Print release ID
         run: echo "The release ID is ${{ steps.get_release_id.outputs.release_id }}"
