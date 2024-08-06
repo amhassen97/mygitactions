@@ -1,0 +1,37 @@
+name: Get Release ID
+
+on:
+  release:
+    types: [created, published]
+
+jobs:
+  get-release-id:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Get release ID
+        id: get_release_id
+        run: |
+          const core = require('@actions/core');
+          const github = require('@actions/github');
+          const fs = require('fs');
+
+          // Read the event payload
+          const eventPath = process.env.GITHUB_EVENT_PATH;
+          const eventPayload = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
+
+          // Extract the release ID
+          const releaseId = eventPayload.release.id;
+
+          // Set the release ID as an output
+          core.setOutput('release_id', releaseId);
+
+      - name: Print release ID
+        run: echo "The release ID is ${{ steps.get_release_id.outputs.release_id }}"
