@@ -26,6 +26,7 @@ jobs:
             const fs = require('fs');
 
             // Read the event payload
+            core.info(`GH event name: ${github.context.eventName}`);
             const eventPath = process.env.GITHUB_EVENT_PATH;
             const eventPayload = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
 
