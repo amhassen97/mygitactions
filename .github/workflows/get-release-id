@@ -2,7 +2,7 @@ name: Get Release ID
 
 on:
   release:
-    types: [created, published]
+    types: [published]
 
 jobs:
   get-release-id:
